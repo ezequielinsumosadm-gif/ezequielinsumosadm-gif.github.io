@@ -34,6 +34,10 @@ h2{font-size:24px;letter-spacing:-.02em;margin:38px 0 12px;color:#122340}
   box-shadow:0 8px 22px rgba(18,35,64,.08)}
 .tar b{display:block;color:#122340;font-size:17px;margin-bottom:3px}
 .tar span{font-size:13.5px;color:#7c8798}
+.dibujo{margin:6px 0 26px;text-align:center;background:#f5f7fa;border:1px solid #e3e8ee;
+  border-radius:10px;padding:10px}
+.dibujo img{max-width:100%;height:auto;display:block;margin:0 auto}
+.dibujo p{margin:2px 0 6px;font-size:13px;color:#7c8798}
 .tabla-caja{overflow-x:auto;margin:18px 0;border:1px solid #d6dde6;border-radius:8px}
 table{width:100%;border-collapse:collapse;font-size:15px}
 th{background:#f5f7fa;color:#122340;text-align:right;font-weight:600;font-size:13px;
@@ -63,7 +67,7 @@ tbody tr:hover{background:#f8fafc}
 footer{background:#122340;color:#9fb2cc;margin-top:60px;padding:34px 0;font-size:14px}
 footer a{color:#2DC4DE}
 @keyframes pda-surgir{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-h1,.bajada,.ficha,.rejilla,.tabla-caja{animation:pda-surgir .5s ease-out both}
+h1,.bajada,.ficha,.rejilla,.tabla-caja,.dibujo{animation:pda-surgir .5s ease-out both}
 .bajada{animation-delay:.06s}
 .ficha,.rejilla,.tabla-caja{animation-delay:.12s}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
