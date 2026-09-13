@@ -1,0 +1,70 @@
+*{box-sizing:border-box}
+body{margin:0;font-family:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color:#363636;background:#fff;font-size:16px;line-height:1.6}
+a{color:#1578DD;text-decoration:none}
+a:hover{text-decoration:underline}
+header{background:#122340;color:#fff;padding:14px 0;border-bottom:3px solid #1578DD}
+.caja{max-width:1100px;margin:0 auto;padding:0 22px}
+header .caja{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+header .marca{font-weight:700;font-size:19px;letter-spacing:-.02em;color:#fff}
+header .marca span{color:#2DC4DE}
+header .marca:hover{text-decoration:none}
+header nav{margin-left:auto;display:flex;gap:20px;font-size:14.5px}
+header nav a{color:#cfe0f4}
+header nav a:hover{color:#2DC4DE;text-decoration:none}
+.miga{font-size:13.5px;color:#7c8798;padding:18px 0 0}
+.miga a{color:#7c8798}
+h1{font-size:38px;line-height:1.15;letter-spacing:-.025em;margin:14px 0 10px;color:#122340}
+h2{font-size:24px;letter-spacing:-.02em;margin:38px 0 12px;color:#122340}
+.bajada{font-size:18px;color:#4a5768;max-width:68ch}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin:26px 0 8px}
+.btn{display:inline-block;padding:13px 26px;border-radius:30px;font-weight:600;
+  font-size:15px;border:2px solid #1578DD;
+  transition:transform .16s ease,box-shadow .16s ease,filter .16s ease}
+.btn-p{background:#1578DD;color:#fff}
+.btn-p:hover{filter:brightness(1.08);text-decoration:none;transform:translateY(-1px);
+  box-shadow:0 6px 18px rgba(21,120,221,.28)}
+.btn-s{color:#1578DD}
+.btn-s:hover{background:#f2f7fd;text-decoration:none}
+.rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:14px;margin:22px 0 10px}
+.tar{display:block;border:1px solid #d6dde6;border-radius:8px;padding:18px 20px;
+  color:inherit;transition:border-color .15s,transform .15s,box-shadow .15s}
+.tar:hover{border-color:#1578DD;transform:translateY(-2px);text-decoration:none;
+  box-shadow:0 8px 22px rgba(18,35,64,.08)}
+.tar b{display:block;color:#122340;font-size:17px;margin-bottom:3px}
+.tar span{font-size:13.5px;color:#7c8798}
+.tabla-caja{overflow-x:auto;margin:18px 0;border:1px solid #d6dde6;border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{background:#f5f7fa;color:#122340;text-align:right;font-weight:600;font-size:13px;
+  letter-spacing:.04em;text-transform:uppercase;padding:12px 14px;white-space:nowrap;
+  position:sticky;top:0}
+th:first-child{text-align:left}
+td{padding:10px 14px;text-align:right;border-top:1px solid #e7ecf2;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+td:first-child{text-align:left;font-weight:600;color:#122340}
+tbody tr:hover{background:#f8fafc}
+.ficha{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:1px;
+  margin:24px 0;border:1px solid #d6dde6;border-radius:8px;overflow:hidden;
+  background:#e7ecf2}
+.ficha>div{background:#fff;padding:16px 18px}
+.ficha dt{font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:#7c8798;
+  font-weight:600;margin:0 0 4px}
+.ficha dd{margin:0;font-size:22px;font-weight:600;color:#122340;
+  font-variant-numeric:tabular-nums}
+.ficha dd small{font-size:13px;font-weight:500;color:#7c8798}
+.nota{background:#f5f7fa;border-left:4px solid #1578DD;padding:14px 18px;margin:24px 0;
+  font-size:14.5px;color:#4a5768}
+.faq h3{font-size:16.5px;color:#122340;margin:20px 0 4px}
+.faq p{margin:0;color:#4a5768;font-size:15px}
+.buscar{display:block;width:100%;max-width:420px;margin:10px 0 0;padding:12px 18px;
+  border:1px solid #d6dde6;border-radius:30px;font:inherit;font-size:15px}
+.buscar:focus{outline:none;border-color:#1578DD;box-shadow:0 0 0 3px rgba(21,120,221,.15)}
+footer{background:#122340;color:#9fb2cc;margin-top:60px;padding:34px 0;font-size:14px}
+footer a{color:#2DC4DE}
+@keyframes pda-surgir{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+h1,.bajada,.ficha,.rejilla,.tabla-caja{animation:pda-surgir .5s ease-out both}
+.bajada{animation-delay:.06s}
+.ficha,.rejilla,.tabla-caja{animation-delay:.12s}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:640px){h1{font-size:28px}.bajada{font-size:16.5px}.ficha dd{font-size:19px}}
