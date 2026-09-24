@@ -393,7 +393,7 @@
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-l/alas-iguales/38x38x1-7/</loc><priority>0.6</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-l/alas-iguales/38x38x2/</loc><priority>0.6</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-l/alas-iguales/38x38x3/</loc><priority>0.6</priority></url>
-<url><loc>https://perfilesdealuminio.net/normalizados/perfiles-l/alas-iguales/38x38x3/</loc><priority>0.6</priority></url>
+<url><loc>https://perfilesdealuminio.net/normalizados/perfiles-l/alas-iguales/38x38x3-cr/</loc><priority>0.6</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-l/alas-iguales/38x38x4/</loc><priority>0.6</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-l/alas-iguales/38-1x38-1x1-5/</loc><priority>0.6</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-l/alas-iguales/40x40x2-5/</loc><priority>0.6</priority></url>
@@ -401,7 +401,7 @@
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-l/alas-iguales/50x50x2/</loc><priority>0.6</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-l/alas-iguales/50x50x3/</loc><priority>0.6</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-l/alas-iguales/50x50x4/</loc><priority>0.6</priority></url>
-<url><loc>https://perfilesdealuminio.net/normalizados/perfiles-l/alas-iguales/50x50x4/</loc><priority>0.6</priority></url>
+<url><loc>https://perfilesdealuminio.net/normalizados/perfiles-l/alas-iguales/50x50x4-cr/</loc><priority>0.6</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-l/alas-iguales/50x50x5/</loc><priority>0.6</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-l/alas-iguales/50-8x50-8x1-5/</loc><priority>0.6</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-l/alas-iguales/51x51x2/</loc><priority>0.6</priority></url>
@@ -548,7 +548,7 @@
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-t/alas-iguales/50x50x6/</loc><priority>0.6</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-t/alas-iguales/50-8x50-8x3/</loc><priority>0.6</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-t/alas-desiguales/</loc><priority>0.8</priority></url>
-<url><loc>https://perfilesdealuminio.net/normalizados/perfiles-t/alas-desiguales/12-5x18x1-2/</loc><priority>0.6</priority></url>
+<url><loc>https://perfilesdealuminio.net/normalizados/perfiles-t/alas-desiguales/12-5x18x1-2-cr/</loc><priority>0.6</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-t/alas-desiguales/20x30x1/</loc><priority>0.6</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-t/alas-desiguales/23-2x24x3/</loc><priority>0.6</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/perfiles-t/alas-desiguales/25x32x1/</loc><priority>0.6</priority></url>
@@ -697,7 +697,7 @@
 <url><loc>https://perfilesdealuminio.net/normalizados/planchuelas/19x2/</loc><priority>0.8</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/planchuelas/19x3/</loc><priority>0.8</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/planchuelas/19x5/</loc><priority>0.8</priority></url>
-<url><loc>https://perfilesdealuminio.net/normalizados/planchuelas/19x5/</loc><priority>0.8</priority></url>
+<url><loc>https://perfilesdealuminio.net/normalizados/planchuelas/19x5-cr/</loc><priority>0.8</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/planchuelas/19x12/</loc><priority>0.8</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/planchuelas/19x16/</loc><priority>0.8</priority></url>
 <url><loc>https://perfilesdealuminio.net/normalizados/planchuelas/19-3x10/</loc><priority>0.8</priority></url>
