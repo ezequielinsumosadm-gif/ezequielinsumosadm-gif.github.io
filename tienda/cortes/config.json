@@ -1,0 +1,124 @@
+{
+ "material": {
+  "producto": "373453633"
+ },
+ "corte": {
+  "manual": {
+   "producto": "373453643",
+   "valor": "Manual (±3 mm)",
+   "precio": 1000
+  },
+  "precision": {
+   "producto": "373453643",
+   "valor": "Precisión (±0,01 mm)",
+   "precio": 2000
+  }
+ },
+ "perfiles": {
+  "366736345": {
+   "nombre": "Disipador 13.5 cm",
+   "pm": 169825,
+   "valor": "Disipador 13.5 cm"
+  },
+  "366833361": {
+   "nombre": "Disipador 9 cm - Liviano",
+   "pm": 57125,
+   "valor": "Disipador 9 cm - Liviano"
+  },
+  "366973670": {
+   "nombre": "Perfil 2020 Round",
+   "pm": 20625,
+   "valor": "Perfil 2020 Round"
+  },
+  "366736376": {
+   "nombre": "Perfil 2020 T-slot",
+   "pm": 20625,
+   "valor": "Perfil 2020 T-slot"
+  },
+  "366833579": {
+   "nombre": "Perfil 2020 V-Slot",
+   "pm": 20625,
+   "valor": "Perfil 2020 V-Slot"
+  },
+  "366973738": {
+   "nombre": "Perfil 2040 T-slot",
+   "pm": 46875,
+   "valor": "Perfil 2040 T-slot"
+  },
+  "366973809": {
+   "nombre": "Perfil 2040 V-Slot",
+   "pm": 46875,
+   "valor": "Perfil 2040 V-Slot"
+  },
+  "366973898": {
+   "nombre": "Perfil 2060 V-Slot",
+   "pm": 65875,
+   "valor": "Perfil 2060 V-Slot"
+  },
+  "366973977": {
+   "nombre": "Perfil 2080",
+   "pm": 87850,
+   "valor": "Perfil 2080"
+  },
+  "367120144": {
+   "nombre": "Perfil 2080 V-Slot",
+   "pm": 87850,
+   "valor": "Perfil 2080 V-Slot"
+  },
+  "367120151": {
+   "nombre": "Perfil 3030",
+   "pm": 52500,
+   "valor": "Perfil 3030"
+  },
+  "367120171": {
+   "nombre": "Perfil 3030 Round",
+   "pm": 51650,
+   "valor": "Perfil 3030 Round"
+  },
+  "367120215": {
+   "nombre": "Perfil 3060",
+   "pm": 99550,
+   "valor": "Perfil 3060"
+  },
+  "367120269": {
+   "nombre": "Perfil 4040",
+   "pm": 72500,
+   "valor": "Perfil 4040"
+  },
+  "367120358": {
+   "nombre": "Perfil 4040 Round",
+   "pm": 81000,
+   "valor": "Perfil 4040 Round"
+  },
+  "367120345": {
+   "nombre": "Perfil 4040 V-Slot",
+   "pm": 70825,
+   "valor": "Perfil 4040 V-Slot"
+  },
+  "367120322": {
+   "nombre": "Perfil 4080 T-slot",
+   "pm": 206750,
+   "valor": "Perfil 4080 T-slot"
+  },
+  "367120392": {
+   "nombre": "Perfil para Mesa Ranurada Doble",
+   "pm": 95350,
+   "valor": "Perfil para Mesa Ranurada Doble"
+  },
+  "367120381": {
+   "nombre": "Perfil para Mesa Ranurada Simple",
+   "pm": 67750,
+   "valor": "Perfil para Mesa Ranurada Simple"
+  },
+  "367120403": {
+   "nombre": "Perfil Ranurado H",
+   "pm": 36300,
+   "valor": "Perfil Ranurado H"
+  },
+  "367120369": {
+   "nombre": "Perfil Guía Lineal para CNC",
+   "pm": 44450,
+   "valor": "Perfil Guía Lineal para CNC"
+  }
+ }
+}
