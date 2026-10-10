@@ -148,6 +148,15 @@
         var prev = localStorage.getItem(CLAVE_NOTA);
         localStorage.setItem(CLAVE_NOTA, (prev ? prev + '\n' : '') + x.nota);
       } catch (e) {}
+      // y a la planilla de cortes: de ahi salen la nota del pedido y el aviso por mail
+      if (cfg.registro) {
+        try {
+          fetch(cfg.registro, {method: 'POST', mode: 'no-cors', keepalive: true,
+            headers: {'Content-Type': 'text/plain;charset=utf-8'},
+            body: JSON.stringify({carrito: window.LS && LS.cart && LS.cart.id, perfil: p.valor, bloques: x.bloques,
+                                  manual: x.nMan, precision: x.nPre, medidas: x.nota})});
+        } catch (e) {}
+      }
       pasos.reduce(function (pr, s) { return pr.then(function () { return agregar(s[0], s[1], s[2]); }); }, Promise.resolve())
         .then(function () { window.location.href = '/comprar/'; })
         .catch(function () { b.disabled = false; b.textContent = 'No se pudo agregar. Probá de nuevo'; });
