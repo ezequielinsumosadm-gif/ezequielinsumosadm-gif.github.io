@@ -74,7 +74,7 @@
       '<div class="pda-cot__aviso" hidden></div>' +
       '<div class="pda-cot__reglas">Se cobra por medio metro, redondeando para arriba, con un mínimo de 1 metro por medida. ' +
       'Corte manual ' + money(cfg.corte.manual.precio) + ' (±3 mm) · de precisión ' + money(cfg.corte.precision.precio) + ' (±0,01 mm). ' +
-      'Entrega a los 5 días hábiles. Las medidas quedan anotadas en tu pedido.</div></div>';
+      'Entrega a los 5 días hábiles. En el carrito te dejamos las medidas listas para copiar en la nota del pedido.</div></div>';
     form.parentNode.insertBefore(caja, form.nextSibling);
 
     var filas = [{largo: 500, cant: 1, tipo: 'manual'}];
@@ -156,7 +156,61 @@
     pintar();
   }
 
+  /* En el carrito: las medidas listas para copiar en la "Nota del cliente".
+   * El checkout de Tienda Nube no acepta scripts que toquen sus campos (solo
+   * NubeSDK, sin acceso a la nota), asi que se las damos al cliente aca, con
+   * un boton para copiarlas y otro para mandarlas por WhatsApp. */
+  var WHATSAPP = '5491140458668';
+  var CSS_CARRITO = '' +
+    '.pda-med{margin:0 0 16px;border:1px solid #2DC4DE;border-radius:10px;overflow:hidden;color:#122340;background:#fff;text-align:left}' +
+    '.pda-med__cab{background:#122340;color:#fff;padding:10px 14px;font-weight:700;font-size:15px}' +
+    '.pda-med__cab span{display:block;font:600 11px monospace;letter-spacing:.12em;text-transform:uppercase;color:#2DC4DE;margin-bottom:3px}' +
+    '.pda-med__txt{margin:0;padding:10px 14px;font:13px/1.5 monospace;white-space:pre-wrap;background:#f6f8fb}' +
+    '.pda-med__pie{padding:10px 14px;font-size:13px;line-height:1.45}' +
+    '.pda-med__btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}' +
+    '.pda-med__btns button,.pda-med__btns a{flex:1 1 140px;text-align:center;border-radius:999px;padding:9px 12px;font-weight:700;font-size:13px;cursor:pointer;text-decoration:none}' +
+    '.pda-med__copiar{background:#2DC4DE;color:#122340;border:0}' +
+    '.pda-med__wa{background:#fff;color:#1578DD;border:1px solid #1578DD}';
+
+  function carrito() {
+    if (!/^\/comprar\/?$/.test(location.pathname)) return false;
+    var nota;
+    try { nota = localStorage.getItem(CLAVE_NOTA); } catch (e) { return true; }
+    if (!nota || document.querySelector('.pda-med')) return true;
+    var boton = document.getElementById('go-to-checkout');
+    if (!boton) return true;
+    // si ya no quedan cortes en el carrito, las medidas viejas no sirven
+    if (document.body.innerText.indexOf('Corte a medida') === -1) {
+      try { localStorage.removeItem(CLAVE_NOTA); } catch (e) {}
+      return true;
+    }
+    var texto = 'Cortes a medida:\n' + nota;
+    var st = document.createElement('style'); st.textContent = CSS_CARRITO; document.head.appendChild(st);
+    var caja = document.createElement('div');
+    caja.className = 'pda-med';
+    caja.innerHTML = '<div class="pda-med__cab"><span>Corte a medida</span>Tus medidas</div>' +
+      '<pre class="pda-med__txt"></pre>' +
+      '<div class="pda-med__pie">Al finalizar la compra, <b>pegalas en "Nota del cliente"</b> para que cortemos cada pieza a la medida. ' +
+      'Si preferís, mandánoslas por WhatsApp.' +
+      '<div class="pda-med__btns"><button type="button" class="pda-med__copiar">Copiar medidas</button>' +
+      '<a class="pda-med__wa" target="_blank" rel="noopener">Enviar por WhatsApp</a></div></div>';
+    caja.querySelector('.pda-med__txt').textContent = texto;
+    caja.querySelector('.pda-med__wa').href = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent('Hola! Hice un pedido en la tienda con estos cortes:\n' + texto);
+    var copiar = caja.querySelector('.pda-med__copiar');
+    copiar.addEventListener('click', function () {
+      function listo() { copiar.textContent = 'Copiadas ✓'; }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(texto).then(listo, listo);
+      else {
+        var ta = document.createElement('textarea'); ta.value = texto; document.body.appendChild(ta);
+        ta.select(); try { document.execCommand('copy'); } catch (e) {} ta.remove(); listo();
+      }
+    });
+    boton.parentNode.insertBefore(caja, boton);
+    return true;
+  }
+
   function iniciar() {
+    if (carrito()) return;
     var id = idProducto();
     if (!id) return;
     fetch(CONFIG_URL, {cache: 'no-cache'}).then(function (r) { return r.json(); }).then(function (cfg) {

@@ -9,6 +9,11 @@
   var nota;
   try { nota = localStorage.getItem(CLAVE_NOTA); } catch (e) { return; }
   if (!nota) return;
+  // pagina de compra confirmada: la nota ya viajo con el pedido
+  if (/success|confirm|gracias/i.test(location.pathname)) {
+    try { localStorage.removeItem(CLAVE_NOTA); } catch (e) {}
+    return;
+  }
   var texto = 'Cortes a medida:\n' + nota;
 
   function campo() {
@@ -30,11 +35,12 @@
     return true;
   }
 
-  var intentos = 0;
+  // el campo de la nota aparece recien en un paso posterior del checkout:
+  // se lo busca mientras la pagina este abierta
   var timer = setInterval(function () {
     var t = campo();
-    if ((t && poner(t)) || ++intentos > 60) clearInterval(timer);
-  }, 500);
+    if (t && poner(t)) clearInterval(timer);
+  }, 1000);
 
   // al confirmar la compra, la nota ya viajo con el pedido
   document.addEventListener('submit', function () { try { localStorage.removeItem(CLAVE_NOTA); } catch (e) {} }, true);
