@@ -11,9 +11,12 @@
  * la entrega y el "Costo calculado"; a la derecha largo, tipo de corte (tarjetas),
  * acabado y cantidad. Se agrega una medida por vez y se repite por cada corte.
  *
- * La cuenta es la de la tienda vieja:
- *   mm a cobrar = cant x largo; minimo 1000 mm, si no redondeo ARRIBA al medio metro
- *   total       = mm * precio_por_mm + piezas * precio del corte
+ * La cuenta es la de la tienda vieja, pero sobre TODOS los cortes del mismo
+ * perfil que ya estan en el carrito (en la vieja cada medida pagaba su metro
+ * minimo: 3 cortes de 280 mm agregados de a uno eran 3 m; aca es 1 m):
+ *   mm a cobrar = suma de cant x largo del perfil; minimo 1000 mm, si no
+ *                 redondeo ARRIBA al medio metro
+ *   este corte  = (mm a cobrar - lo ya cobrado) * precio_por_mm + piezas * precio del corte
  * En el carrito entra como productos comunes:
  *   N x "Corte a medida · Material", variante del perfil (N = mm cobrados / 500)
  *   M x "Corte a medida · Servicio de corte", variante Manual / Precision
@@ -23,6 +26,7 @@
   'use strict';
   var CONFIG_URL = 'https://ezequielinsumosadm-gif.github.io/tienda/cortes/config.json';
   var CLAVE_NOTA = 'pda_cortes_nota';
+  var CLAVE_ACUM = 'pda_cortes_acum';      // {perfil: mm utiles ya cargados}
   var LARGO_MIN = 40, LARGO_MAX = 2500;
   var ENTREGA = 'El pedido se entrega a los 5 días hábiles de haber concretado la compra.';
 
@@ -34,10 +38,29 @@
     return f ? String(f.value) : null;
   }
 
-  function cotizar(pm, largo, cant, precioCorte) {
-    var util = cant * largo;
-    var mm = util <= 1000 ? 1000 : Math.ceil(util / 500) * 500;
-    return {util: util, mm: mm, material: mm * pm / 1000, cortes: cant * precioCorte};
+  function cobrado(util) { return util <= 0 ? 0 : util <= 1000 ? 1000 : Math.ceil(util / 500) * 500; }
+
+  // previo = {util, mm}: lo que ya hay de este perfil en el carrito
+  function cotizar(pm, largo, cant, precioCorte, previo) {
+    var util = previo.util + cant * largo, mm = Math.max(cobrado(util), previo.mm);
+    return {util: util, mm: mm, nuevo: mm - previo.mm, material: (mm - previo.mm) * pm / 1000, cortes: cant * precioCorte};
+  }
+
+  function leerAcum() { try { return JSON.parse(localStorage.getItem(CLAVE_ACUM)) || {}; } catch (e) { return {}; } }
+  function guardarAcum(a) { try { localStorage.setItem(CLAVE_ACUM, JSON.stringify(a)); } catch (e) {} }
+
+  // bloques de material de ese perfil que hay hoy en el carrito (lo que manda es el carrito:
+  // si el cliente borro o cambio el renglon, el acumulado se ajusta)
+  function bloquesEnCarrito(valor) {
+    return fetch('/comprar/', {credentials: 'same-origin', cache: 'no-store'}).then(function (r) { return r.text(); }).then(function (t) {
+      var d = new DOMParser().parseFromString(t, 'text/html'), n = 0;
+      [].forEach.call(d.querySelectorAll('.js-cart-item'), function (it) {
+        if (it.textContent.indexOf('Corte a medida · Material (' + valor + ')') === -1) return;
+        var q = it.querySelector('input.js-cart-quantity-input');
+        n += q ? (parseInt(q.value, 10) || 0) : 0;
+      });
+      return n;
+    });
   }
 
   // mira (crosshairs) dibujada: no depende de que el tema traiga FontAwesome
@@ -159,6 +182,17 @@
 
     var $ = function (s) { return caja.querySelector(s); };
     var ultimo = null;
+    var previo = {util: 0, mm: 0};           // este perfil, ya en el carrito
+    function sincronizar() {
+      return bloquesEnCarrito(p.valor).then(function (bloques) {
+        var a = leerAcum(), mm = bloques * 500;
+        // sin material en el carrito no hay nada acumulado; si hay menos de lo anotado, se recorta
+        previo = {mm: mm, util: Math.min(a[p.valor] || 0, mm)};
+        if (!mm) delete a[p.valor]; else a[p.valor] = previo.util;
+        guardarAcum(a);
+        calcular();
+      }).catch(function () {});
+    }
 
     function calcular() {
       var largo = parseInt($('.pda-cot__largo').value, 10) || 0;
@@ -175,14 +209,19 @@
       // acabado como en la vieja: multiplicador 1 suma un recargo por metro, si no multiplica
       var pm = p.pm;
       if (ac.multiplicador) pm = ac.multiplicador === 1 ? pm + (ac.valorEnPesos || 0) : pm * ac.multiplicador;
-      var c = cotizar(pm, largo, cant, cfg.corte[tipo].precio);
+      var c = cotizar(pm, largo, cant, cfg.corte[tipo].precio, previo);
+      var cortes = cant + ' corte' + (cant > 1 ? 's' : '') + ' ($' + money(c.cortes) + ')';
       $('.pda-cot__num').textContent = money(c.material + c.cortes);
-      $('.pda-cot__det').textContent = cant + ' × ' + largo + ' mm = ' + nf(c.util / 1000, 2) + ' m · se cobran ' + nf(c.mm / 1000, 2) +
-        ' m (' + '$' + money(c.material) + ') + ' + cant + ' corte' + (cant > 1 ? 's' : '') + ' ($' + money(c.cortes) + ')';
+      $('.pda-cot__det').textContent = previo.mm
+        ? 'Ya tenés ' + nf(previo.util / 1000, 2) + ' m de este perfil en el carrito (' + nf(previo.mm / 1000, 2) + ' m pagos). ' +
+          'Con este corte: ' + nf(c.util / 1000, 2) + ' m → ' + (c.nuevo ? 'sumás ' + nf(c.nuevo / 1000, 2) + ' m ($' + money(c.material) + ')' :
+          'entra en lo que ya pagaste') + ' + ' + cortes
+        : cant + ' × ' + largo + ' mm = ' + nf(c.util / 1000, 2) + ' m · se cobran ' + nf(c.mm / 1000, 2) + ' m ($' + money(c.material) + ') + ' + cortes;
       var av = $('.pda-cot__aviso');
       av.hidden = !(c.mm > c.util);
-      av.textContent = c.mm > c.util ? 'Incluye ' + nf((c.mm - c.util) / 1000, 2) + ' m de recorte por el mínimo de 1 metro y el redondeo al medio metro.' : '';
-      ultimo = {bloques: c.mm / 500, tipo: tipo, cant: cant,
+      av.textContent = c.mm > c.util ? 'Te sobran ' + nf((c.mm - c.util) / 1000, 2) + ' m pagos de este perfil (mínimo 1 metro, por medio metro): ' +
+        'si agregás otro corte, entra ahí sin pagar más material.' : '';
+      ultimo = {bloques: c.nuevo / 500, util: c.util, tipo: tipo, cant: cant,
         nota: p.nombre + ': ' + cant + ' x ' + largo + ' mm (' + (tipo === 'manual' ? 'manual' : 'precisión') + ')' +
           (ac.nombre && ac.nombre !== 'Natural' ? ' · ' + ac.nombre : '')};
     }
@@ -211,7 +250,8 @@
       var b = this, x = ultimo;
       if (!x) return;
       b.disabled = true; b.textContent = 'Agregando…';
-      var pedidos = [[cfg.material.producto, x.bloques, p.valor], [cfg.corte[x.tipo].producto, x.cant, cfg.corte[x.tipo].valor]];
+      var pedidos = [[cfg.corte[x.tipo].producto, x.cant, cfg.corte[x.tipo].valor]];
+      if (x.bloques) pedidos.unshift([cfg.material.producto, x.bloques, p.valor]);
       pedidos.reduce(function (pr, s) { return pr.then(function () { return agregar(s[0], s[1], s[2]); }); }, Promise.resolve())
         .then(function () {
           // las medidas se acumulan: se pueden cotizar varios cortes y perfiles en la misma compra
@@ -219,6 +259,8 @@
             var prev = localStorage.getItem(CLAVE_NOTA);
             localStorage.setItem(CLAVE_NOTA, (prev ? prev + '\n' : '') + x.nota);
           } catch (e) {}
+          var a = leerAcum(); a[p.valor] = x.util; guardarAcum(a);
+          previo = {util: x.util, mm: previo.mm + x.bloques * 500};
           // y a la planilla de cortes: de ahi salen la nota del pedido y el aviso por mail
           if (cfg.registro) {
             try {
@@ -237,10 +279,12 @@
 
     $('.pda-cot__seguir').addEventListener('click', function () {
       $('.pda-cot__ok').hidden = true; $('.pda-cot__acc').hidden = false;
+      calcular();
       $('.pda-cot__largo').focus();
     });
 
     calcular();
+    sincronizar();
   }
 
   /* En el carrito: las medidas listas para copiar en la "Nota del cliente".
@@ -268,7 +312,7 @@
     if (!boton) return true;
     // si ya no quedan cortes en el carrito, las medidas viejas no sirven
     if (document.body.innerText.indexOf('Corte a medida') === -1) {
-      try { localStorage.removeItem(CLAVE_NOTA); } catch (e) {}
+      try { localStorage.removeItem(CLAVE_NOTA); localStorage.removeItem(CLAVE_ACUM); } catch (e) {}
       return true;
     }
     var texto = 'Cortes a medida:\n' + nota;
