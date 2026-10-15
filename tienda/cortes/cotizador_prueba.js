@@ -220,8 +220,8 @@
         : cant + ' × ' + largo + ' mm = ' + nf(c.util / 1000, 2) + ' m · se cobran ' + nf(c.mm / 1000, 2) + ' m ($' + money(c.material) + ') + ' + cortes;
       var av = $('.pda-cot__aviso');
       av.hidden = !(c.mm > c.util);
-      av.textContent = c.mm > c.util ? 'Te sobran ' + nf((c.mm - c.util) / 1000, 2) + ' m pagos de este perfil (mínimo 1 metro, por medio metro): ' +
-        'si agregás otro corte, entra ahí sin pagar más material.' : '';
+      av.textContent = c.mm > c.util ? 'Se cobra mínimo 1 metro y por medio metro: te quedan ' + nf((c.mm - c.util) / 1000, 2) +
+        ' m pagos para otros cortes de este perfil, sin pagar más material.' : '';
       ultimo = {bloques: c.nuevo / 500, util: c.util, tipo: tipo, cant: cant,
         nota: p.nombre + ': ' + cant + ' x ' + largo + ' mm (' + (tipo === 'manual' ? 'manual' : 'precisión') + ')' +
           (ac.nombre && ac.nombre !== 'Natural' ? ' · ' + ac.nombre : '')};
