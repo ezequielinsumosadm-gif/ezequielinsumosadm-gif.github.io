@@ -51,7 +51,7 @@
     '.pda-tog{display:inline-flex;align-items:center;gap:6px;margin:4px 0 12px;padding:7px 14px;border:0;border-radius:4px;cursor:pointer;' +
       'background:linear-gradient(90deg,#1578DD 0%,#2DC4DE 100%);color:#fff;font:700 14px/1.2 inherit;font-family:inherit}' +
     '.pda-tog svg{transition:transform .3s}.pda-tog:hover svg,.pda-tog[aria-expanded="true"] svg{transform:rotate(180deg)}' +
-    '.pda-cot{clear:both;width:100%;box-sizing:border-box;margin:24px 0;padding:28px 16px 40px;background:#f4f6f9;color:#122340;font-family:inherit;text-align:left}' +
+    '.pda-cot{clear:both;width:100%;box-sizing:border-box;margin:24px 0;padding:28px 16px 40px;background:#f4f6f9;color:#122340;font-family:inherit;text-align:left;scroll-margin-top:140px}' +
     '.pda-cot[hidden]{display:none}' +
     '.pda-cot *{box-sizing:border-box}' +
     '.pda-cot__in{max-width:1140px;margin:0 auto;display:flex;flex-wrap:wrap;background:#fff;border:1px solid #e3e8ef;border-radius:6px;overflow:hidden}' +
