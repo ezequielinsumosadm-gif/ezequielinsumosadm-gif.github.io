@@ -90,8 +90,12 @@
     '.pda-cot__tipos input:focus-visible+label{outline:2px solid #2DC4DE;outline-offset:2px}' +
     '.pda-cot__tipos strong{display:block;font-size:15px}.pda-cot__tipos strong span{color:#1578DD}' +
     '.pda-cot__tipos small{display:block;margin-top:2px;font-size:12.5px;color:#3d4c64}' +
-    '@media (max-width:767px){.pda-cot{padding:16px 0 24px}.pda-cot__info,.pda-cot__form{padding:22px 18px}' +
-      '.pda-cot__info{order:2}.pda-cot__tit{font-size:21px}.pda-cot__precio{font-size:32px}}';
+    // celular: titulo, campos, precio y boton, y recien despues los pasos y la entrega
+    '@media (max-width:767px){.pda-cot{padding:16px 0 24px}.pda-cot__in{flex-direction:column}' +
+      '.pda-cot__info{display:contents}.pda-cot__form{order:2;flex:none;padding:20px 18px}' +
+      '.pda-cot__tit{order:1;margin:0;padding:18px 18px 14px;font-size:21px}' +
+      '.pda-cot__pie{order:3;margin:0;padding:20px 18px 6px}.pda-cot__precio{font-size:32px}' +
+      '.pda-cot__pasos{order:4;margin:0;padding:14px 18px 6px}.pda-cot__entrega{order:5;margin:0 18px 18px}}';
 
   function montar(cfg, p) {
     var form = document.querySelector('form#product_form, form.js-product-form');
