@@ -147,8 +147,9 @@
         '</div>' +
       '</div>';
 
-    // a todo el ancho, debajo de la ficha (fila de foto + datos); si no la encuentra, debajo del formulario
-    var fila = form.closest('#single-product .row, .js-product-detail .row, [data-store^="product-info"] .row, .row');
+    // en compu, a todo el ancho debajo de la ficha (fila de foto + datos), como en la tienda vieja;
+    // en el celular, pegado al formulario (si no, queda despues de toda la descripcion)
+    var fila = window.matchMedia('(min-width: 768px)').matches && form.closest('.row');
     var ancla = fila && fila.parentNode ? fila : form;
     ancla.parentNode.insertBefore(caja, ancla.nextSibling);
 
