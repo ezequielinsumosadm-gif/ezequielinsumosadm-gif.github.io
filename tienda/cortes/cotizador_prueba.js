@@ -176,7 +176,8 @@
 
     // en compu, a todo el ancho debajo de la ficha (fila de foto + datos), como en la tienda vieja;
     // en el celular, pegado al formulario (si no, queda despues de toda la descripcion)
-    var fila = window.matchMedia('(min-width: 768px)').matches && form.closest('.row');
+    // (.row en Morelia; .product-columns en Ipanema)
+    var fila = window.matchMedia('(min-width: 768px)').matches && form.closest('.row, .product-columns');
     var ancla = fila && fila.parentNode ? fila : form;
     ancla.parentNode.insertBefore(caja, ancla.nextSibling);
 
