@@ -33,8 +33,15 @@
   function money(v) { return Math.round(v).toLocaleString('es-AR'); }
   function nf(v, d) { return v.toLocaleString('es-AR', {minimumFractionDigits: d, maximumFractionDigits: d}); }
 
+  // el formulario de la ficha: solo en /productos/... (en Ipanema las tarjetas de la
+  // portada y de "productos similares" tambien son form.js-product-form)
+  function formFicha() {
+    if (!/^\/productos\//.test(location.pathname)) return null;
+    return document.querySelector('form#product_form') || document.querySelector('form.js-product-form');
+  }
+
   function idProducto() {
-    var f = document.querySelector('form#product_form input[name="add_to_cart"], form.js-product-form input[name="add_to_cart"]');
+    var form = formFicha(), f = form && form.querySelector('input[name="add_to_cart"]');
     return f ? String(f.value) : null;
   }
 
@@ -121,7 +128,7 @@
       '.pda-cot__pasos{order:4;margin:0;padding:14px 18px 6px}.pda-cot__entrega{order:5;margin:0 18px 18px}}';
 
   function montar(cfg, p) {
-    var form = document.querySelector('form#product_form, form.js-product-form');
+    var form = formFicha();
     if (!form || document.querySelector('.pda-cot')) return;
     var st = document.createElement('style'); st.textContent = CSS; document.head.appendChild(st);
 
