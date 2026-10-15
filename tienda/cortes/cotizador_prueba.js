@@ -55,7 +55,7 @@
     return fetch('/comprar/', {credentials: 'same-origin', cache: 'no-store'}).then(function (r) { return r.text(); }).then(function (t) {
       var d = new DOMParser().parseFromString(t, 'text/html'), n = 0;
       [].forEach.call(d.querySelectorAll('.js-cart-item'), function (it) {
-        if (it.textContent.indexOf('Corte a medida · Material (' + valor + ')') === -1) return;
+        if (it.textContent.replace(/\s+/g, ' ').indexOf('Corte a medida · Material (' + valor + ')') === -1) return;
         var q = it.querySelector('input.js-cart-quantity-input');
         n += q ? (parseInt(q.value, 10) || 0) : 0;
       });
