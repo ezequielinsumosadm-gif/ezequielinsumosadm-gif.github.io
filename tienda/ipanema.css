@@ -41,3 +41,5 @@
 .section-testimonials .heading-block:after{content:"";position:absolute;left:50%;bottom:0;width:72px;height:4px;margin-left:-36px;border-radius:2px;background:linear-gradient(90deg,#1578DD 0,#1578DD 66%,transparent 66%,transparent 74%,#2DC4DE 74%,#2DC4DE 100%)}
 .section-testimonials .testimonial{background:#fff;border-radius:16px;padding:28px 24px;box-shadow:0 10px 26px rgba(18,35,64,.08);height:100%}
 .section-testimonials .testimonial svg,.section-testimonials .testimonial [class*=star]{color:#F5B301;fill:#F5B301}
+/* carrusel en celular: degradé navy desde arriba para que el titulo blanco se lea sobre fotos claras */
+@media (max-width:767px){.section-slideshow .media-visual{position:relative}.section-slideshow .media-visual:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(18,35,64,0) 12%,rgba(18,35,64,.6) 34%,rgba(18,35,64,.88) 60%,rgba(18,35,64,.92) 100%)}.section-slideshow .media-content{z-index:2}}
