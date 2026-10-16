@@ -115,6 +115,36 @@
     if (on !== valor) { sw.click(); await w(500); }
     return etiqueta + '=' + valor;
   };
+  // Ajustes globales: el boton se llama "Ajustes del tema" o "Ajustes globales" segun la version
+  window.__ajustes = async function (nombre) {
+    var b = [].find.call(document.querySelectorAll('button'), function (b) {
+      return /Ajustes (del tema|globales)/.test((b.title || '') + (b.getAttribute('aria-label') || '') + b.innerText);
+    });
+    if (b) { b.click(); await w(1200); }
+    if (!nombre) return !!b;
+    var it = [].find.call(document.querySelectorAll('button,a,[role=button],li,div'), function (e) {
+      return e.getBoundingClientRect().left < 300 && e.children.length < 4 && e.innerText && e.innerText.trim() === nombre;
+    });
+    if (!it) return 'no ' + nombre;
+    it.click(); await w(1200); return 'ok ' + nombre;
+  };
+  window.__cerrarAjustes = async function () {
+    var b = [].find.call(document.querySelectorAll('button'), function (b) {
+      return b.getBoundingClientRect().left < 300 && /Cerrar/.test((b.title || '') + (b.getAttribute('aria-label') || ''));
+    });
+    if (b) { b.click(); await w(800); } return !!b;
+  };
+  // Carga el CSS publicado en GitHub Pages en "CSS personalizado" y guarda
+  window.__cargarCSS = async function () {
+    var css = await fetch('https://ezequielinsumosadm-gif.github.io/tienda/ipanema.css?' + Date.now()).then(function (r) { return r.text(); });
+    await window.__ajustes('CSS personalizado');
+    var ta = [].find.call(document.querySelectorAll('textarea'), function (t) { return t.offsetParent; });
+    if (!ta) return 'sin textarea';
+    Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set.call(ta, css);
+    ta.dispatchEvent(new Event('input', {bubbles: true})); ta.dispatchEvent(new Event('change', {bubbles: true}));
+    await w(600);
+    return css.length + ' caracteres, ' + await window.__guardar();
+  };
   window.__opcion = async function (etiqueta) {
     var b = [].find.call(document.querySelectorAll('button,[role=radio],label'), function (e) { return der(e) && e.innerText && e.innerText.trim() === etiqueta; });
     if (!b) return 'no ' + etiqueta; b.click(); await w(500); return 'ok ' + etiqueta;

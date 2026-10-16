@@ -3,6 +3,8 @@
 .section-featured-categories .heading-block:after,.section-product-list .heading-block:after,.section-faq .heading-block:after{content:"";position:absolute;left:50%;bottom:0;width:72px;height:4px;margin-left:-36px;border-radius:2px;background:linear-gradient(90deg,#1578DD 0,#1578DD 66%,transparent 66%,transparent 74%,#2DC4DE 74%,#2DC4DE 100%)}
 .section-slideshow .heading-block{font-size:54px;line-height:1.08;max-width:620px;letter-spacing:-.02em;text-shadow:0 2px 14px rgba(0,0,0,.25)}
 .section-slideshow .text-block,.section-slideshow p{font-size:18px;line-height:1.55;max-width:520px}
+/* carrusel: que el texto y el boton entren en la pantalla de una notebook (sin esto mide 747 px) */
+@media (min-width:768px){.section-slideshow .media-visual{height:clamp(480px,calc(100vh - 150px),640px)!important}.section-slideshow .media-visual picture,.section-slideshow .media-visual img{width:100%;height:100%!important;object-fit:cover;object-position:60% 40%}}
 .section-icon-text a,.section-icon-text h3,.section-icon-text h4{color:#122340}
 .category-item-link{display:block;border-radius:14px;overflow:hidden}
 .category-item-link img{transition:transform .5s ease}
