@@ -319,7 +319,9 @@
     var boton = document.getElementById('go-to-checkout');
     if (!boton) return true;
     // si ya no quedan cortes en el carrito, las medidas viejas no sirven
-    if (document.body.innerText.indexOf('Corte a medida') === -1) {
+    // (se mira solo en los renglones del carrito: "Corte a medida" tambien esta en el menu)
+    var renglones = [].map.call(document.querySelectorAll('.js-cart-item'), function (e) { return e.textContent; }).join(' ').replace(/\s+/g, ' ');
+    if (renglones.indexOf('Corte a medida ·') === -1) {
       try { localStorage.removeItem(CLAVE_NOTA); localStorage.removeItem(CLAVE_ACUM); } catch (e) {}
       return true;
     }
