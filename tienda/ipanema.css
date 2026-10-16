@@ -1,0 +1,21 @@
+/* PerfilesdeAluminio.net - Ipanema (Ajustes globales > CSS personalizado) */
+.section-featured-categories .heading-block,.section-product-list .heading-block,.section-faq .heading-block{position:relative;padding-bottom:18px;font-weight:700;letter-spacing:-.01em}
+.section-featured-categories .heading-block:after,.section-product-list .heading-block:after,.section-faq .heading-block:after{content:"";position:absolute;left:50%;bottom:0;width:72px;height:4px;margin-left:-36px;border-radius:2px;background:linear-gradient(90deg,#1578DD 0,#1578DD 66%,transparent 66%,transparent 74%,#2DC4DE 74%,#2DC4DE 100%)}
+.section-slideshow .heading-block{font-size:54px;line-height:1.08;max-width:620px;letter-spacing:-.02em;text-shadow:0 2px 14px rgba(0,0,0,.25)}
+.section-slideshow .text-block,.section-slideshow p{font-size:18px;line-height:1.55;max-width:520px}
+.section-icon-text a,.section-icon-text h3,.section-icon-text h4{color:#122340}
+.category-item-link{display:block;border-radius:14px;overflow:hidden}
+.category-item-link img{transition:transform .5s ease}
+.category-item-link:hover img{transform:scale(1.04)}
+.product-item{border-radius:14px;transition:transform .3s ease,box-shadow .3s ease}
+.product-item:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(18,35,64,.12)}
+.js-product-item-image-container-private{border-radius:14px;overflow:hidden;background:#fff}
+.section-image-with-text .media-grid{border-radius:18px;overflow:hidden;background:#F2F5F9;box-shadow:0 12px 34px rgba(18,35,64,.10);margin-bottom:36px}
+.section-image-with-text .media-visual{overflow:hidden}
+.section-image-with-text .media-visual img{height:100%;object-fit:cover;transition:transform .8s ease}
+.section-image-with-text .media-grid:hover .media-visual img{transform:scale(1.05)}
+.section-image-with-text .group-block{justify-content:center;height:100%;padding:48px 56px}
+.section-image-with-text .heading-block{font-size:34px;line-height:1.15;letter-spacing:-.01em;margin-bottom:6px}
+.section-image-with-text .group-content{gap:18px}
+@media (min-width:768px){.section-image-with-text .media-visual,.section-image-with-text .media-content-group{max-height:500px}.section-image-with-text .media-visual img{max-height:500px}}
+@media (max-width:767px){.section-slideshow .heading-block{font-size:32px}.section-slideshow .text-block,.section-slideshow p{font-size:15px}.section-image-with-text .group-block{padding:32px 24px}.section-image-with-text .heading-block{font-size:26px}}
