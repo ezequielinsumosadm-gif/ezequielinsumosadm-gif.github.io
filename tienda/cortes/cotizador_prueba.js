@@ -350,7 +350,25 @@
     return true;
   }
 
+  // Lo que no tiene precio (SKU fuera de Zeus o lista 10 en 0) lo muestra el tema
+  // como "Consultar precio"; Pablo quiere "Consultar stock y precio". El tema lo
+  // vuelve a escribir al cambiar de variante, por eso se observa la pagina.
+  var CONSULTAR = 'Consultar stock y precio';
+  function consultar() {
+    [].forEach.call(document.querySelectorAll('input[type=submit], button, .js-open-quickshop-wording, .btn'), function (e) {
+      if (e.tagName === 'INPUT') { if (/^\s*Consultar precio\s*$/.test(e.value)) e.value = CONSULTAR; }
+      else if (e.children.length === 0 && /^\s*Consultar precio\s*$/.test(e.textContent)) e.textContent = CONSULTAR;
+    });
+  }
+  function vigilarConsultar() {
+    consultar();
+    var t = null;
+    new MutationObserver(function () { clearTimeout(t); t = setTimeout(consultar, 60); })
+      .observe(document.body, {subtree: true, childList: true, attributes: true, attributeFilter: ['value']});
+  }
+
   function iniciar() {
+    vigilarConsultar();
     if (carrito()) return;
     var id = idProducto();
     if (!id) return;
