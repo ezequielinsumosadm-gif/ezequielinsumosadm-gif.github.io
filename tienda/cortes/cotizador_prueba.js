@@ -398,7 +398,11 @@
     caja.className = 'pda-env'; caja.hidden = true;
     caja.innerHTML = '<label><input type="checkbox" class="pda-env__si"><span>Cortala en tramos de 1,5 m para que te la podamos enviar</span></label>' +
       '<div class="pda-env__det"></div>';
-    (boton.closest('.js-buy-button-container') || boton).parentNode.insertBefore(caja, boton.closest('.js-buy-button-container') || boton);
+    // va antes del bloque que tiene la cantidad y el boton (en Ipanema estan lado a lado en una grilla)
+    var bloque = boton, cantidad = form.querySelector('[name=quantity]');
+    while (cantidad && bloque.parentElement && bloque.parentElement !== form && !bloque.contains(cantidad)) bloque = bloque.parentElement;
+    if (!cantidad || bloque === form) bloque = boton.closest('.js-buy-button-container') || boton;
+    bloque.parentNode.insertBefore(caja, bloque);
     var si = caja.querySelector('.pda-env__si'), det = caja.querySelector('.pda-env__det');
     var actual = null;
 
