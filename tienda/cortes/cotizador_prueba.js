@@ -431,8 +431,17 @@
       tira.set('quantity', String(cant));
       var corte = new FormData();
       corte.append('add_to_cart', e.producto); corte.append('variation[0]', e.valor); corte.append('quantity', String(a.cortes * cant));
-      var post = function (fd) { return fetch('/comprar/', {method: 'POST', body: fd, credentials: 'same-origin'}).then(function (r) { if (!r.ok) throw new Error(r.status); }); };
-      post(tira).then(function () { return post(corte); }).then(function () {
+      var post = function (fd) { return fetch('/comprar/', {method: 'POST', body: fd, credentials: 'same-origin'}).then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); }); };
+      // con el carrito vacio, el primer POST crea el carrito: se confirma que el renglon
+      // quedo (la respuesta es la pagina del carrito) y si no, se repite una vez
+      var esta = function (html, texto) {
+        var d = new DOMParser().parseFromString(html, 'text/html');
+        return [].some.call(d.querySelectorAll('.js-cart-item'), function (it) { return it.textContent.replace(/\s+/g, ' ').indexOf(texto) !== -1; });
+      };
+      var asegurar = function (fd, texto) {
+        return post(fd).then(function (h) { return esta(h, texto) ? h : post(fd).then(function (h2) { if (!esta(h2, texto)) throw new Error('no quedo'); }); });
+      };
+      asegurar(tira, nombre.trim()).then(function () { return asegurar(corte, e.valor); }).then(function () {
         var nota = nombre.trim() + ' (' + a.v.sku + '): ' + cant + ' tira' + (cant > 1 ? 's' : '') + ' de ' + mts(a.largo) +
           ' cortada' + (cant > 1 ? 's' : '') + ' en ' + a.tramos + ' tramos de 1,5 m para envío';
         try { var prev = localStorage.getItem(CLAVE_NOTA); localStorage.setItem(CLAVE_NOTA, (prev ? prev + '\n' : '') + nota); } catch (x) {}
