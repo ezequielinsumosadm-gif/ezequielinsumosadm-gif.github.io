@@ -43,3 +43,5 @@
 .section-testimonials .testimonial svg,.section-testimonials .testimonial [class*=star]{color:#F5B301;fill:#F5B301}
 /* carrusel en celular: degradé navy desde arriba para que el titulo blanco se lea sobre fotos claras */
 @media (max-width:767px){.section-slideshow .media-visual{position:relative}.section-slideshow .media-visual:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(18,35,64,0) 12%,rgba(18,35,64,.6) 34%,rgba(18,35,64,.88) 60%,rgba(18,35,64,.92) 100%)}.section-slideshow .media-content{z-index:2}}
+/* los 2 productos internos del cotizador (Material y Servicio de corte) tienen que estar publicados para ir al carrito, pero no se muestran en listados, busqueda ni carruseles */
+[data-product-id="373453633"],[data-product-id="373453643"],[data-store="product-item-373453633"],[data-store="product-item-373453643"]{display:none!important}
