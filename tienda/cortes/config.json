@@ -121,5 +121,11 @@
    "valor": "Perfil Guía Lineal para CNC"
   }
  },
- "registro": "https://script.google.com/macros/s/AKfycbz7WTpAWrz7xkZyCmvW4Fyma73C4mYx0r234aQxcwO9TdJSrkvlRPZnszpimxiVDG5x/exec"
+ "registro": "https://script.google.com/macros/s/AKfycbz7WTpAWrz7xkZyCmvW4Fyma73C4mYx0r234aQxcwO9TdJSrkvlRPZnszpimxiVDG5x/exec",
+ "envio": {
+  "producto": "373453643",
+  "valor": "Para envío (tramos de 1,5 m)",
+  "precio": 1000,
+  "tramo": 1500
+ }
 }

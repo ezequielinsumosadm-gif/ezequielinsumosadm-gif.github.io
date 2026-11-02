@@ -367,6 +367,87 @@
       .observe(document.body, {subtree: true, childList: true, attributes: true, attributeFilter: ['value']});
   }
 
+  /* Corte para envio (Pablo, 2026-11-02): una tira de mas de 1,5 m no se puede
+   * despachar entera; cortada en tramos de 1,5 m si. En la ficha, si la variante
+   * elegida es una tira larga (el largo sale del SKU: 7006-L6000 = 6 m) y tiene
+   * precio, se ofrece cortarla. Con la opcion marcada, "Agregar al carrito" suma
+   * la tira (el mismo formulario de la ficha) y los cortes: tramos = largo / 1,5 m
+   * redondeado para arriba, cortes = tramos - 1 por tira. Cada corte se cobra.
+   * Los tramos quedan unos milimetros mas cortos por la sierra.
+   */
+  function largoSku(sku) { var m = /-L(\d+)/i.exec(sku || ''); return m ? parseInt(m[1], 10) : 0; }
+  function mts(mm) { return nf(mm / 1000, mm % 1000 ? (mm % 100 ? 2 : 1) : 0) + ' m'; }
+
+  function envio(cfg) {
+    var e = cfg.envio, form = formFicha();
+    if (!e || !form || document.querySelector('.pda-env')) return;
+    var cont = form.closest('[data-variants]') || document.querySelector('[data-variants]');
+    var variantes = [];
+    try { variantes = JSON.parse(cont.getAttribute('data-variants')); } catch (x) { return; }
+    var boton = form.querySelector('.js-addtocart');
+    if (!boton || !variantes.length) return;
+    var nombre = (document.querySelector('.js-product-name') || {}).textContent || '';
+
+    var st = document.createElement('style');
+    st.textContent = '.pda-env{margin:4px 0 16px;padding:14px 16px;border:1px solid #cfe3f5;border-radius:6px;background:#f4f9fe;color:#122340;font-size:14px;line-height:1.5}' +
+      '.pda-env[hidden]{display:none}.pda-env label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-weight:700}' +
+      '.pda-env input{margin-top:3px;width:18px;height:18px;flex:none;accent-color:#1578DD}' +
+      '.pda-env__det{margin:6px 0 0 28px;font-weight:400;color:#3d4c64}.pda-env__det b{color:#1578DD}';
+    document.head.appendChild(st);
+    var caja = document.createElement('div');
+    caja.className = 'pda-env'; caja.hidden = true;
+    caja.innerHTML = '<label><input type="checkbox" class="pda-env__si"><span>Cortala en tramos de 1,5 m para que te la podamos enviar</span></label>' +
+      '<div class="pda-env__det"></div>';
+    (boton.closest('.js-buy-button-container') || boton).parentNode.insertBefore(caja, boton.closest('.js-buy-button-container') || boton);
+    var si = caja.querySelector('.pda-env__si'), det = caja.querySelector('.pda-env__det');
+    var actual = null;
+
+    function elegida() {
+      var sel = [].map.call(form.querySelectorAll('[name^="variation["]'), function (s) { return s.value; });
+      return variantes.filter(function (v) {
+        return sel.every(function (val, i) { return v['option' + i] == null || String(v['option' + i]) === val; });
+      })[0] || (variantes.length === 1 ? variantes[0] : null);
+    }
+    function cuenta() {
+      var v = elegida(), largo = v ? largoSku(v.sku) : 0;
+      if (!v || v.contact || !v.available || largo <= e.tramo) { caja.hidden = true; si.checked = false; actual = null; return; }
+      var tramos = Math.ceil(largo / e.tramo), cortes = tramos - 1, ultimo = largo - e.tramo * cortes;
+      actual = {v: v, largo: largo, tramos: tramos, cortes: cortes};
+      caja.hidden = false;
+      det.innerHTML = 'Tira de ' + mts(largo) + ' → <b>' + tramos + ' tramos</b>' +
+        (ultimo < e.tramo ? ' (' + cortes + ' de 1,5 m y uno de ' + mts(ultimo) + ')' : ' de 1,5 m') +
+        ': ' + cortes + ' corte' + (cortes > 1 ? 's' : '') + ' × $' + money(e.precio) + ' = <b>$' + money(cortes * e.precio) + '</b> por tira. ' +
+        'Cada tramo queda unos milímetros más corto por el corte de la sierra; el último es el más corto.';
+    }
+    form.addEventListener('change', cuenta);
+    cuenta();
+
+    boton.addEventListener('click', function (ev) {
+      if (!si.checked || !actual) return;            // sin la opcion, la ficha agrega como siempre
+      ev.preventDefault(); ev.stopImmediatePropagation();
+      var a = actual, cant = Math.max(1, parseInt((form.querySelector('[name=quantity]') || {}).value, 10) || 1);
+      var etiqueta = boton.value; boton.disabled = true; boton.value = 'Agregando…';
+      var tira = new FormData(form);
+      tira.set('quantity', String(cant));
+      var corte = new FormData();
+      corte.append('add_to_cart', e.producto); corte.append('variation[0]', e.valor); corte.append('quantity', String(a.cortes * cant));
+      var post = function (fd) { return fetch('/comprar/', {method: 'POST', body: fd, credentials: 'same-origin'}).then(function (r) { if (!r.ok) throw new Error(r.status); }); };
+      post(tira).then(function () { return post(corte); }).then(function () {
+        var nota = nombre.trim() + ' (' + a.v.sku + '): ' + cant + ' tira' + (cant > 1 ? 's' : '') + ' de ' + mts(a.largo) +
+          ' cortada' + (cant > 1 ? 's' : '') + ' en ' + a.tramos + ' tramos de 1,5 m para envío';
+        try { var prev = localStorage.getItem(CLAVE_NOTA); localStorage.setItem(CLAVE_NOTA, (prev ? prev + '\n' : '') + nota); } catch (x) {}
+        if (cfg.registro) {
+          try {
+            fetch(cfg.registro, {method: 'POST', mode: 'no-cors', keepalive: true, headers: {'Content-Type': 'text/plain;charset=utf-8'},
+              body: JSON.stringify({carrito: window.LS && LS.cart && LS.cart.id, perfil: a.v.sku, bloques: 0,
+                                    manual: a.cortes * cant, precision: 0, envio: true, medidas: nota})});
+          } catch (x) {}
+        }
+        location.href = '/comprar/';
+      }).catch(function () { boton.disabled = false; boton.value = 'No se pudo agregar. Probá de nuevo'; setTimeout(function () { boton.value = etiqueta; }, 3000); });
+    }, true);
+  }
+
   function iniciar() {
     vigilarConsultar();
     if (carrito()) return;
@@ -375,6 +456,7 @@
     fetch(CONFIG_URL, {cache: 'no-cache'}).then(function (r) { return r.json(); }).then(function (cfg) {
       var p = cfg.perfiles && cfg.perfiles[id];
       if (p) montar(cfg, p);
+      envio(cfg);
     }).catch(function () {});
   }
 
