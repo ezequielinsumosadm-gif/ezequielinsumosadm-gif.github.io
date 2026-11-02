@@ -499,8 +499,42 @@
     marcar();
   }
 
+  /* Busqueda por medida (Pablo, 2026-11-02): si se busca "75x25" y se entra a la
+   * ficha, la ficha abria en la primera medida. Se guarda lo buscado y, al llegar a
+   * la ficha, se elige la primera variante cuya medida empieza con esos numeros.
+   */
+  function numeros(t) { return (String(t).match(/\d+(?:[.,]\d+)?/g) || []).map(function (n) { return parseFloat(n.replace(',', '.')); }); }
+  function guardarBusqueda() {
+    var q = new URLSearchParams(location.search).get('q');
+    if (/^\/search\//.test(location.pathname) && q) { try { sessionStorage.setItem('pda_busqueda', q); } catch (x) {} }
+  }
+  function elegirBuscada() {
+    var form = formFicha(), q = null;
+    try { q = sessionStorage.getItem('pda_busqueda'); } catch (x) {}
+    if (!form || !q || !/\/search\//.test(document.referrer || '')) return;
+    try { sessionStorage.removeItem('pda_busqueda'); } catch (x) {}
+    var buscados = numeros(q);
+    if (!buscados.length) return;
+    var cont = form.closest('[data-variants]') || document.querySelector('[data-variants]'), variantes;
+    try { variantes = JSON.parse(cont.getAttribute('data-variants')); } catch (x) { return; }
+    var cand = variantes.filter(function (v) {
+      var n = numeros(v.option0 || '');
+      return buscados.every(function (b, i) { return n[i] === b; });
+    });
+    var v = cand.filter(function (x) { return x.available; })[0] || cand[0];
+    if (!v) return;
+    [].forEach.call(form.querySelectorAll('select[name^="variation["]'), function (s, i) {
+      var val = v['option' + i];
+      if (val == null || s.value === String(val)) return;
+      s.value = String(val);
+      s.dispatchEvent(new Event('change', {bubbles: true}));   // lo escuchan el tema (jQuery) y este script
+    });
+  }
+
   function iniciar() {
     vigilarConsultar();
+    guardarBusqueda();
+    elegirBuscada();
     stockEnOpciones();
     if (carrito()) return;
     var id = idProducto();
