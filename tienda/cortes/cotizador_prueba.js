@@ -426,7 +426,14 @@
       if (!si.checked || !actual) return;            // sin la opcion, la ficha agrega como siempre
       ev.preventDefault(); ev.stopImmediatePropagation();
       var a = actual, cant = Math.max(1, parseInt((form.querySelector('[name=quantity]') || {}).value, 10) || 1);
-      var etiqueta = boton.value; boton.disabled = true; boton.value = 'Agregando…';
+      var etiqueta = boton.value;
+      // la tienda recorta la cantidad al stock: sin este control se cobrarian cortes de tiras que no entran
+      if (a.v.stock != null && cant > a.v.stock) {
+        boton.value = a.v.stock > 0 ? 'Hay ' + a.v.stock + ' en stock' : 'Sin stock';
+        setTimeout(function () { boton.value = etiqueta; }, 3000);
+        return;
+      }
+      boton.disabled = true; boton.value = 'Agregando…';
       var tira = new FormData(form);
       tira.set('quantity', String(cant));
       var corte = new FormData();
