@@ -389,7 +389,7 @@
     var nombre = (document.querySelector('.js-product-name') || {}).textContent || '';
 
     var st = document.createElement('style');
-    st.textContent = '.pda-env{margin:4px 0 16px;padding:14px 16px;border:1px solid #cfe3f5;border-radius:6px;background:#f4f9fe;color:#122340;font-size:14px;line-height:1.5}' +
+    st.textContent = '.pda-env{flex:0 0 100%;width:100%;max-width:100%;box-sizing:border-box;margin:4px 0 16px;padding:14px 16px;border:1px solid #cfe3f5;border-radius:6px;background:#f4f9fe;color:#122340;font-size:14px;line-height:1.5}' +
       '.pda-env[hidden]{display:none}.pda-env label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-weight:700}' +
       '.pda-env input{margin-top:3px;width:18px;height:18px;flex:none;accent-color:#1578DD}' +
       '.pda-env__det{margin:6px 0 0 28px;font-weight:400;color:#3d4c64}.pda-env__det b{color:#1578DD}';
