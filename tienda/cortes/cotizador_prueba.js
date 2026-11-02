@@ -468,8 +468,40 @@
     }, true);
   }
 
+  /* Stock en la lista de medidas (Pablo, 2026-11-02): cada opcion del desplegable
+   * dice "con stock" o "sin stock" segun la variante que queda con las otras
+   * opciones elegidas. Solo el texto que se ve: el value no cambia, asi que el tema
+   * sigue encontrando la variante. Si la variante no controla stock (null) no se dice nada.
+   */
+  function stockEnOpciones() {
+    var form = formFicha();
+    var cont = form && (form.closest('[data-variants]') || document.querySelector('[data-variants]'));
+    if (!cont) return;
+    var variantes;
+    try { variantes = JSON.parse(cont.getAttribute('data-variants')); } catch (x) { return; }
+    var selects = [].slice.call(form.querySelectorAll('select[name^="variation["]'));
+    if (!selects.length) return;
+    function marcar() {
+      var elegido = selects.map(function (s) { return s.value; });
+      selects.forEach(function (s, i) {
+        [].forEach.call(s.options, function (o) {
+          if (o.dataset.pdaTxt == null) o.dataset.pdaTxt = o.textContent;
+          var v = variantes.filter(function (x) {
+            return elegido.every(function (val, j) { var op = x['option' + j]; return op == null || String(op) === (j === i ? o.value : val); });
+          })[0];
+          var txt = o.dataset.pdaTxt;
+          if (v && !v.contact && v.stock != null) txt += v.stock > 0 && v.available ? ' · con stock' : ' · sin stock';
+          if (o.textContent !== txt) o.textContent = txt;
+        });
+      });
+    }
+    form.addEventListener('change', function () { setTimeout(marcar, 30); });
+    marcar();
+  }
+
   function iniciar() {
     vigilarConsultar();
+    stockEnOpciones();
     if (carrito()) return;
     var id = idProducto();
     if (!id) return;
